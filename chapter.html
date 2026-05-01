@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阅读</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #1a1a1a;
+            --ink-soft: #555;
+            --ink-muted: #888;
+            --accent: #c0392b;
+            --accent-soft: #f9eded;
+            --border: #e0dbd5;
+            --bg: #faf8f5;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* CHAPTER HEADER */
+        .chapter-header {
+            width: 100%;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 24px 32px;
+            text-align: center;
+        }
+
+        .chapter-header h1 {
+            font-size: clamp(22px, 4vw, 34px);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--ink);
+        }
+
+        .chapter-header-divider {
+            width: 32px;
+            height: 2px;
+            background: var(--accent);
+            margin: 16px auto;
+        }
+
+        .chapter-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .chapter-meta a {
+            font-size: 13px;
+            color: var(--accent);
+            text-decoration: none;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 4px 14px;
+            transition: background 0.15s, color 0.15s;
+        }
+        .chapter-meta a:hover { background: var(--accent); color: #fff; }
+        .chapter-meta a svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+        .back-link {
+            color: var(--ink-muted) !important;
+            border-color: var(--border) !important;
+        }
+        .back-link:hover { background: var(--bg) !important; color: var(--ink) !important; }
+
+        /* CONTENT */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 48px 24px 100px;
+        }
+
+        .content {
+            font-size: 17px;
+            line-height: 2.1;
+            color: var(--ink);
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .loading {
+            color: var(--ink-muted);
+            font-size: 14px;
+            padding: 60px 0;
+            text-align: center;
+            font-family: -apple-system, sans-serif;
+        }
+        .error {
+            color: var(--accent);
+            font-size: 13px;
+            padding: 60px 0;
+            text-align: center;
+            font-family: -apple-system, sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .chapter-header { padding: 32px 20px 24px; }
+            .container { padding: 32px 20px 80px; }
+            .content { font-size: 16px; line-height: 2; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="chapter-header">
+    <h1 id="chapter-title">章节</h1>
+    <div class="chapter-header-divider"></div>
+    <div class="chapter-meta">
+        <a id="telegram-link" href="#" target="_blank" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+            在TELEGRAM频道上阅读
+        </a>
+        <a class="back-link" href="index.html">← 返回目录</a>
+    </div>
+</header>
+
+<main class="container">
+    <div id="content" class="loading">加载中…</div>
+</main>
+
+<script>
+    const REPO = "yuri-forever/novel";
+    const BRANCH = "main";
+    const RAW = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+
+    function getParam(key) {
+        return new URLSearchParams(location.search).get(key);
+    }
+
+    async function loadChapter() {
+        const title = getParam("title");
+        const file = getParam("file");
+
+        if (title) {
+            document.title = title + " — 百合花仍开";
+            document.getElementById("chapter-title").textContent = title;
+        }
+
+        if (!file) {
+            document.getElementById("content").innerHTML = '<span class="error">缺少章节参数</span>';
+            return;
+        }
+
+        try {
+            const res = await fetch(`${RAW}/${file}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const raw = await res.text();
+
+            const lines = raw.split('\n');
+            const firstLine = lines[0].trim();
+            const match = firstLine.match(/^!Telegram:\s*(https?:\/\/\S+)/);
+
+            const tgEl = document.getElementById("telegram-link");
+            if (match) {
+                tgEl.href = match[1];
+                tgEl.style.display = "inline-flex";
+                lines.shift();
+            }
+
+            const el = document.getElementById("content");
+            el.className = "content";
+            el.textContent = lines.join('\n').replace(/^\n+/, '');
+
+        } catch (e) {
+            document.getElementById("content").innerHTML =
+                `<span class="error">加载失败：${e.message}</span>`;
+        }
+    }
+
+    loadChapter();
+</script>
+</body>
+</html>

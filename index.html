@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百合花仍开</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ink: #1a1a1a;
+            --ink-soft: #555;
+            --ink-muted: #888;
+            --accent: #c0392b;
+            --accent-soft: #f9eded;
+            --border: #e0dbd5;
+            --bg: #faf8f5;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: "Noto Serif SC", "PingFang SC", "Microsoft YaHei", serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* HERO HEADER */
+        .hero {
+            width: 100%;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 56px 24px 44px;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            color: var(--ink-muted);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+
+        .hero-divider {
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+            margin: 20px auto;
+        }
+
+        .hero-author {
+            font-size: 14px;
+            color: var(--ink-soft);
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .hero-desc {
+            font-size: 13px;
+            color: var(--ink-muted);
+            max-width: 480px;
+            margin: 0 auto 20px;
+            line-height: 1.8;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        .hero-tg {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--accent);
+            text-decoration: none;
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            padding: 5px 16px;
+            transition: background 0.15s, color 0.15s;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+        .hero-tg:hover { background: var(--accent); color: #fff; }
+        .hero-tg svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+        /* CHAPTER LIST */
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            color: var(--ink-muted);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+        }
+
+        .chapter-list {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--card-bg);
+        }
+
+        .chapter-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            text-decoration: none;
+            color: var(--ink);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.12s;
+            gap: 12px;
+        }
+        .chapter-item:last-child { border-bottom: none; }
+        .chapter-item:hover { background: var(--accent-soft); }
+
+        .chapter-item-title {
+            font-size: 15px;
+            font-weight: 400;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chapter-item-arrow {
+            color: var(--ink-muted);
+            font-size: 18px;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .loading {
+            color: var(--ink-muted);
+            font-size: 14px;
+            padding: 32px 0;
+            text-align: center;
+            font-family: -apple-system, sans-serif;
+        }
+        .error {
+            color: var(--accent);
+            font-size: 13px;
+            padding: 32px 0;
+            text-align: center;
+            font-family: -apple-system, sans-serif;
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 40px 20px 32px; }
+            .container { padding: 28px 16px 60px; }
+            .chapter-item { padding: 14px 16px; }
+            .chapter-item-title { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="hero">
+    <p class="hero-label">Yuri Forever</p>
+    <h1>百合花仍开</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-author">By WangZixu</p>
+    <p class="hero-desc">具体的信息，还请查看"关于这里" | 在这里感谢您的阅读！</p>
+    <a class="hero-tg" href="https://t.me/yuri_forever" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+        Telegram 发布频道
+    </a>
+</header>
+
+<main class="container">
+    <p class="section-title">章节目录</p>
+    <div class="chapter-list" id="chapter-list">
+        <p class="loading">加载章节中…</p>
+    </div>
+</main>
+
+<script>
+    const REPO = "yuri-forever/novel";
+    const BRANCH = "main";
+    const RAW = `https://raw.githubusercontent.com/${REPO}/${BRANCH}`;
+
+    async function loadIndex() {
+        try {
+            const res = await fetch(`${RAW}/index.json`);
+            if (!res.ok) throw new Error("无法读取 index.json");
+            const data = await res.json();
+
+            const list = document.getElementById("chapter-list");
+            list.innerHTML = "";
+
+            if (!data.chapters || data.chapters.length === 0) {
+                list.innerHTML = '<p class="loading">暂无章节</p>';
+                return;
+            }
+
+            data.chapters.forEach(ch => {
+                const a = document.createElement("a");
+                a.className = "chapter-item";
+                const tg = ch.telegram ? `&telegram=${encodeURIComponent(ch.telegram)}` : '';
+                a.href = `chapter.html?id=${encodeURIComponent(ch.id)}&file=${encodeURIComponent(ch.file)}&title=${encodeURIComponent(ch.title)}${tg}`;
+
+                const title = document.createElement("span");
+                title.className = "chapter-item-title";
+                title.textContent = ch.title;
+
+                const arrow = document.createElement("span");
+                arrow.className = "chapter-item-arrow";
+                arrow.textContent = "›";
+
+                a.appendChild(title);
+                a.appendChild(arrow);
+                list.appendChild(a);
+            });
+
+        } catch (e) {
+            document.getElementById("chapter-list").innerHTML =
+                `<p class="error">加载失败：${e.message}</p>`;
+        }
+    }
+
+    loadIndex();
+</script>
+</body>
+</html>
